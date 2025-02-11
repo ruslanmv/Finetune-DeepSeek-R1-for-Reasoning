@@ -88,7 +88,7 @@ model, tokenizer = FastLanguageModel.from_pretrained(
     max_lora_rank = lora_rank,
     gpu_memory_utilization = 0.6, # Adjust if you run out of memory
 )
-
+```
 Here I suggest modify vllm_utils.py of Usloth to make compatible with granite models.
 ```
 # Fix up rotary_emb by re-initing them
