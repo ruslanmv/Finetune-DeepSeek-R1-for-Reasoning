@@ -1,9 +1,12 @@
 ![](https://images.pexels.com/photos/1181271/pexels-photo-1181271.jpeg)
 
-## Finetune DeepSeek-R1 for Reasoning 
-DeepSeek's R1 models have emerged as leaders in reasoning performance, rivaling even OpenAI's models.  Built upon the powerful DeepSeek-V3 architecture and distilled for efficiency, the R1 series offers incredible potential.  Thanks to Unsloth, fine-tuning these models is now easier and more accessible than ever.
 
-This blog post will guide you through the process of fine-tuning DeepSeek-R1 models using Python and the Unsloth library. We'll break down each step, providing clear explanations and all the Python code you need to get started.  Let's unlock the full potential of DeepSeek-R1 and tailor it to your specific reasoning tasks\!
+## Finetune Granite3.1 for Reasoning
+IBM's Granite3.1 models are powerful foundation models designed for enterprise AI applications. With fine-tuning, we can enhance Granite’s reasoning capabilities, making it competitive with state-of-the-art models in complex logical and analytical tasks.
+
+Just as DeepSeek-R1 has demonstrated strong reasoning performance, Granite3.1 can also be optimized for superior reasoning through efficient fine-tuning techniques. Unsloth provides an accessible way to fine-tune these models, enabling greater adaptability for specific tasks.
+
+This blog post will guide you through the process of fine-tuning Granite3.1 using Python and the Unsloth library. We'll cover each step in detail, providing clear explanations and all the Python code needed to get started. Let’s unlock the full potential of Granite3.1 and elevate its reasoning capabilities!
 
 
 
@@ -11,7 +14,7 @@ This blog post will guide you through the process of fine-tuning DeepSeek-R1 mod
 
   * **Setting up your environment:** Installing the necessary libraries, including Unsloth.
   * **Preparing your data:**  Understanding and loading a dataset suitable for reasoning fine-tuning.
-  * **Fine-tuning DeepSeek-R1:**  Using Unsloth to efficiently train your model with GRPO (Guided Reward Policy Optimization).
+  * **Fine-tuning Granite 3.1 Model:**  Using Unsloth to efficiently train your model with GRPO (Guided Reward Policy Optimization).
   * **Inference with your finetuned model:**  Running your custom model to see the improvements.
   * **Saving and sharing your model:**  Options for saving your finetuned model in various formats like LoRA, merged weights, and GGUF for llama.cpp compatibility.
 
@@ -66,9 +69,9 @@ PatchFastRL("GRPO", FastLanguageModel)
   * `from unsloth import FastLanguageModel, PatchFastRL`:  Imports the necessary classes from the Unsloth library.
   * `PatchFastRL("GRPO", FastLanguageModel)`:  This is the crucial patching step. It tells Unsloth that we intend to use the GRPO algorithm and applies the necessary modifications to the `FastLanguageModel` class to support it.
 
-## Step 3: Load DeepSeek-R1 Model
+## Step 3: Load Granite Model
 
-Now, we load the DeepSeek-R1 model we want to fine-tune. We'll use `meta-Llama-3.1-8B-Instruct` as the base model, as DeepSeek-R1 distilled models are often based on Llama architectures, making them compatible with Unsloth's Llama configurations.  We'll also set some important parameters for efficient fine-tuning.
+Now, we load the granite model we want to fine-tune. We'll use `ibm-granite/granite-3.1-2b-instruct` as the base model. We'll also set some important parameters for efficient fine-tuning.
 
 ```python
 from unsloth import is_bfloat16_supported
@@ -78,7 +81,7 @@ max_seq_length = 512  # Can increase for longer reasoning traces
 lora_rank = 32        # Larger rank = smarter, but potentially slower
 
 model, tokenizer = FastLanguageModel.from_pretrained(
-    model_name = "meta-llama/meta-Llama-3.1-8B-Instruct", # Or a DeepSeek distilled model based on Llama
+    model_name = "ibm-granite/granite-3.1-2b-instruct", # Or a DeepSeek distilled model based on Llama
     max_seq_length = max_seq_length,
     load_in_4bit = True,        # Use 4-bit quantization for memory efficiency
     fast_inference = True,      # Enable vLLM for faster inference later
@@ -86,6 +89,20 @@ model, tokenizer = FastLanguageModel.from_pretrained(
     gpu_memory_utilization = 0.6, # Adjust if you run out of memory
 )
 
+Here I suggest modify vllm_utils.py of Usloth to make compatible with granite models.
+```
+# Fix up rotary_emb by re-initing them
+    for module in new_model.modules():
+        if hasattr(module, "rotary_emb"):
+            module.rotary_emb = module.rotary_emb.__class__(
+                config = config,
+               # device = "cuda:0",
+            )
+        pass
+    pass
+```
+then 
+```
 model = FastLanguageModel.get_peft_model(
     model,
     r = lora_rank,              # LoRA rank, must match max_lora_rank
@@ -105,7 +122,7 @@ model = FastLanguageModel.get_peft_model(
       * `max_seq_length = 512`:  Sets the maximum sequence length for the model. You can increase this if your reasoning tasks require longer context, but it will consume more memory.
       * `lora_rank = 32`: Defines the rank of the LoRA (Low-Rank Adaptation) matrices. LoRA is a parameter-efficient fine-tuning technique. Higher rank can lead to better performance but increased memory usage.
   * **`FastLanguageModel.from_pretrained(...)`:** Loads the pre-trained model and tokenizer.
-      * `model_name = "meta-llama/meta-Llama-3.1-8B-Instruct"`:  Specifies the base model to use.  You can replace this with a specific DeepSeek-R1 distilled model name from Hugging Face if you know one based on Llama architecture is available on Unsloth's collection.  If you want to fine-tune a Qwen-distilled DeepSeek R1, you would use a Qwen base model here instead.
+      * `model_name = "ibm-granite/granite-3.1-2b-instruct"`:  Specifies the base model to use.  You can replace this with a specific DeepSeek-R1 distilled model name from Hugging Face if you know one based on Llama architecture is available on Unsloth's collection.  If you want to fine-tune a Qwen-distilled DeepSeek R1, you would use a Qwen base model here instead.
       * `load_in_4bit = True`: Enables 4-bit quantization. This dramatically reduces memory usage, allowing you to fine-tune larger models even on GPUs with limited memory (like free Colab T4).
       * `fast_inference = True`:  Enables vLLM for faster inference after fine-tuning.
       * `max_lora_rank = lora_rank`:  Sets the maximum LoRA rank, ensuring consistency.
@@ -463,7 +480,7 @@ For use with `llama.cpp` and tools like Jan or Open WebUI, you can convert your 
 
 ## Conclusion
 
-Congratulations\! You've successfully fine-tuned a DeepSeek-R1 model for reasoning using Unsloth. You've learned how to set up your environment, prepare your data, train your model with GRPO, test its performance, and save it in various formats.
+Congratulations\! You've successfully fine-tuned a Granite model for reasoning using Unsloth. You've learned how to set up your environment, prepare your data, train your model with GRPO, test its performance, and save it in various formats.
 
 This is just a starting point.  To further improve your model's reasoning abilities:
 
