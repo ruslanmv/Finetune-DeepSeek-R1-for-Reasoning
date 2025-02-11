@@ -414,11 +414,11 @@ This merges the LoRA adapters back into the base model weights. This creates a s
 ```python
 # Merge to 16bit (Float16) - uncomment to save
 # if False: model.save_pretrained_merged("model_merged_fp16", tokenizer, save_method = "merged_16bit")
-# if False: model.push_to_hub_merged("your_username/deepseek-r1-finetuned-fp16", tokenizer, save_method = "merged_16bit", token = "YOUR_HUGGINGFACE_TOKEN")
+# if False: model.push_to_hub_merged("your_username/granite3.1-finetuned-fp16", tokenizer, save_method = "merged_16bit", token = "YOUR_HUGGINGFACE_TOKEN")
 
 # Merge to 4bit (Int4) - uncomment to save
 # if False: model.save_pretrained_merged("model_merged_int4", tokenizer, save_method = "merged_4bit")
-# if False: model.push_to_hub_merged("your_username/deepseek-r1-finetuned-int4", tokenizer, save_method = "merged_4bit", token = "YOUR_HUGGINGFACE_TOKEN")
+# if False: model.push_to_hub_merged("your_username/granite3.1-finetuned-int4", tokenizer, save_method = "merged_4bit", token = "YOUR_HUGGINGFACE_TOKEN")
 ```
 
 **Explanation:**
@@ -428,7 +428,7 @@ This merges the LoRA adapters back into the base model weights. This creates a s
       * `tokenizer`: The tokenizer.
       * `save_method = "merged_16bit"` or `save_method = "merged_4bit"`: Specifies the saving method. `"merged_16bit"` saves in float16 (good for vLLM), and `"merged_4bit"` saves in int4 (even more memory efficient).
   * `model.push_to_hub_merged(...)`: Pushes the merged model to your Hugging Face Hub repository.
-      * `"your_username/deepseek-r1-finetuned-fp16"` or `"your_username/deepseek-r1-finetuned-int4"`: Replace `"your_username"` with your Hugging Face username and choose a repository name.
+      * `"your_username/granite3.1-finetuned-fp16"` or `"your_username/granite3.1-finetuned-int4"`: Replace `"your_username"` with your Hugging Face username and choose a repository name.
       * `token = "YOUR_HUGGINGFACE_TOKEN"`: You need a Hugging Face Hub token to push to the Hub. You can generate one in your Hugging Face settings ([https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)).
 
 **Saving LoRA Adapters Only:**
@@ -438,7 +438,7 @@ If you prefer to keep the LoRA adapters separate (smaller file size, can be load
 ```python
 # Save LoRA adapters only - uncomment to save
 # if False: model.save_pretrained_merged("lora_adapters", tokenizer, save_method = "lora")
-# if False: model.push_to_hub_merged("your_username/deepseek-r1-finetuned-lora", tokenizer, save_method = "lora", token = "YOUR_HUGGINGFACE_TOKEN")
+# if False: model.push_to_hub_merged("your_username/granite3.1-finetuned-lora", tokenizer, save_method = "lora", token = "YOUR_HUGGINGFACE_TOKEN")
 ```
 
 **Saving to GGUF for llama.cpp Compatibility:**
@@ -450,20 +450,20 @@ For use with `llama.cpp` and tools like Jan or Open WebUI, you can convert your 
 
 # Save to 8bit Q8_0 - uncomment to save
 # if False: model.save_pretrained_gguf("model_gguf_q8_0", tokenizer)
-# if False: model.push_to_hub_gguf("your_username/deepseek-r1-finetuned-gguf-q8_0", tokenizer, token = "YOUR_HUGGINGFACE_TOKEN")
+# if False: model.push_to_hub_gguf("your_username/granite3.1-finetuned-gguf-q8_0", tokenizer, token = "YOUR_HUGGINGFACE_TOKEN")
 
 # Save to 16bit GGUF - uncomment to save
 # if False: model.save_pretrained_gguf("model_gguf_f16", tokenizer, quantization_method = "f16")
-# if False: model.push_to_hub_gguf("your_username/deepseek-r1-finetuned-gguf-f16", tokenizer, quantization_method = "f16", token = "YOUR_HUGGINGFACE_TOKEN")
+# if False: model.push_to_hub_gguf("your_username/granite3.1-finetuned-gguf-f16", tokenizer, quantization_method = "f16", token = "YOUR_HUGGINGFACE_TOKEN")
 
 # Save to q4_k_m GGUF (recommended balance of size and performance) - uncomment to save
 # if False: model.save_pretrained_gguf("model_gguf_q4_k_m", tokenizer, quantization_method = "q4_k_m")
-# if False: model.push_to_hub_gguf("your_username/deepseek-r1-finetuned-gguf-q4_k_m", tokenizer, quantization_method = "q4_k_m", token = "YOUR_HUGGINGFACE_TOKEN")
+# if False: model.push_to_hub_gguf("your_username/granite3.1-finetuned-gguf-q4_k_m", tokenizer, quantization_method = "q4_k_m", token = "YOUR_HUGGINGFACE_TOKEN")
 
 # Save to multiple GGUF options at once (faster if you want multiple quantizations) - uncomment to save
 # if False:
 #     model.push_to_hub_gguf(
-#         "your_username/deepseek-r1-finetuned-gguf-multi", # Choose a repo name
+#         "your_username/granite3.1-finetuned-gguf-multi", # Choose a repo name
 #         tokenizer,
 #         quantization_method = ["q4_k_m", "q8_0", "q5_k_m"], # Specify quantization methods
 #         token = "YOUR_HUGGINGFACE_TOKEN",
