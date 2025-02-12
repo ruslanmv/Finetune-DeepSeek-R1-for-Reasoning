@@ -478,18 +478,22 @@ For use with `llama.cpp` and tools like Jan or Open WebUI, you can convert your 
       * `quantization_method`:  Specifies the quantization method for GGUF. Common options include `"q8_0"` (fast conversion, larger size), `"f16"` (16-bit float GGUF), and `"q4_k_m"` (recommended balance of size and performance). You can also provide a list of quantization methods to save multiple GGUF versions at once.
   * `model.push_to_hub_gguf(...)`: Pushes the GGUF files to the Hugging Face Hub, similar to `push_to_hub_merged`.
 
-## Conclusion
+## Conclusion  
 
-Congratulations\! You've successfully fine-tuned a Granite model for reasoning using Unsloth. You've learned how to set up your environment, prepare your data, train your model with GRPO, test its performance, and save it in various formats.
+Congratulations! You've successfully fine-tuned a **Granite model for reasoning** using Unsloth. You've learned how to **set up your environment, prepare your data, train your model with GRPO, test its performance, and save it in various formats**.  
 
-This is just a starting point.  To further improve your model's reasoning abilities:
+This is just the beginning. To further enhance your model’s reasoning abilities:  
 
-  * **Train for longer:** Increase `max_steps` or set `num_train_epochs = 1` for a full training run.
-  * **Experiment with hyperparameters:**  Adjust learning rate, LoRA rank, batch size, and other training parameters.
-  * **Use a larger and more diverse reasoning dataset:** Explore other reasoning datasets beyond GSM8K.
-  * **Increase sequence length:** If your reasoning tasks require longer context, increase `max_seq_length`.
+- **Train for longer:** Increase `max_steps` or set `num_train_epochs = 1` for a full training run.  
+- **Experiment with hyperparameters:** Adjust **learning rate, LoRA rank, batch size**, and other parameters.  
+- **Use a larger and more diverse reasoning dataset:** Go beyond **GSM8K** and explore more reasoning datasets.  
+- **Increase sequence length:** If your tasks require longer context, **increase `max_seq_length`**.  
 
-Unsloth makes fine-tuning powerful models like DeepSeek-R1 accessible to everyone. We encourage you to explore further, experiment, and build amazing reasoning applications\!
+You can **download the models here**:  
 
+🔹 [**ruslanmv/granite-3.1-2b-Reasoning-LORA**](https://huggingface.co/ruslanmv/granite-3.1-2b-Reasoning-LORA)  
+🔹 [**ruslanmv/granite-3.1-2b-Reasoning-GGUF**](https://huggingface.co/ruslanmv/granite-3.1-2b-Reasoning-GGUF)  
+🔹 [**ruslanmv/granite-3.1-2b-Reasoning-4bit**](https://huggingface.co/ruslanmv/granite-3.1-2b-Reasoning-4bit)  
+🔹 [**ruslanmv/granite-3.1-2b-Reasoning**](https://huggingface.co/ruslanmv/granite-3.1-2b-Reasoning)  
 
-We're excited to see what you build\! Happy fine-tuning\!
+We're excited to see what you build! 🚀 **Happy fine-tuning!**
